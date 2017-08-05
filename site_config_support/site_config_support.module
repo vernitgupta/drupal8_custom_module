@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+define('NO_KEY_DEFINE', 'No API Key yet');
+
+/**
+ * Implements hook_form_alter()
+ */
+function site_config_support_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch($form_id) {
+    case 'system_site_information_settings':  
+      $apiKey = \Drupal::state()->get('siteapikey') ?: NO_KEY_DEFINE;	 //Assing default value to text field
+	  
+	  $form['api_key_details'] = array(
+        '#type' => 'fieldset', 
+        '#title' => t('API KEY DETAILS'),
+        '#weight' => -1,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,		
+      );
+	  $form['api_key_details']['site_api_key'] = array(
+	    '#type' => 'textfield',
+		'#title' => t('Site API Key'),
+		'#default_value' => $apiKey
+	  );
+	  
+	  $form['actions']['submit']['#value'] = t('Update Configuration'); //Submit button value changed
+	  
+      //Adding custom submit handler for store api key	  
+	  $form['#submit'][] = 'site_config_support_form_submit'; 	
+	break;
+  }
+}
+
+/**
+ * Submit handler for updating SITE API KEY
+ */
+function site_config_support_form_submit(array $form, FormStateInterface $form_state) {
+  $apiKey = $form_state->getValue(array('site_api_key'));   
+  if ($apiKey != NO_KEY_DEFINE && $apiKey != \Drupal::state()->get('siteapikey')) {
+    \Drupal::state()->set('siteapikey', $apiKey);
+    $message = 'Site API Key has been saved with ' . $apiKey;    
+  } else {
+	$message = 'The configuration options have been saved.';
+  }
+  drupal_set_message($message); //Set the status message
+}

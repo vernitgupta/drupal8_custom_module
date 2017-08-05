@@ -1,0 +1,7 @@
+site_config_support.site_page_json_controller:
+  path: '/page_json/{siteapikey}/{nid}'
+  defaults:
+    _controller: '\Drupal\site_config_support\Controller\SitePageJsonController::sitePageJson'
+    _title: 'Node Page JSON'  
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,11 @@
+name: 'Site API key configuration support'
+type: module
+description: 'Manages the API key for site.'
+package: custom
+dependencies:
+  - system
+  - serialization
+version: '8.3.1'
+core: '8.x'
+project: 'drupal_custom'
+datestamp: 1501913773
